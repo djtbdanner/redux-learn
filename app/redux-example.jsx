@@ -7,8 +7,15 @@ console.log('Starting redux example!!');
 var reducer = (state = {name: 'Anonymous'}, action) => {
   // This is just what the 6 context does above
   //state = state || {name: 'Anonymous'};
-  return state;
-
+  switch (action.type){
+    case "CHANGE_NAME":
+      return {
+        ...state,
+        name: action.name
+      };
+      default:
+        return state;
+  }
 };
 
 // argument needs to be a pure function
@@ -17,7 +24,13 @@ var store = redux.createStore(reducer);
 var currentState = store.getState();
 console.log('currentState', currentState);
 
+var action = {
+  type: 'CHANGE_NAME',
+  name: 'Dave'
+};
 
+store.dispatch(action);
+console.log('name should be changed to ' + action.name, store.getState());
 
 // /* pure function (no outside varibles,
 //    no change outside variables, always
