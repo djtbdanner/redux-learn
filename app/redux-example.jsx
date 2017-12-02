@@ -2,60 +2,54 @@ var redux = require('redux');
 
 console.log('Starting redux example!!');
 
-var stateDefault = {
-  name: "Anonymous",
-  hobbies: [],
-  movies: []
-}
 // requires return a state
 var nextHobbyId = 1;
 var nextMovieId = 1;
-var reducer = (state = stateDefault, action) => {
-  // This is just what the 6 context does above
-  //state = state || {name: 'Anonymous'};
+var nameReducer = (state = "Anonymous", action) => {
   switch (action.type) {
     case "CHANGE_NAME":
-      return {
-        ...state,
-        name: action.name
-      };
-
-    case "ADD_HOBBY":
-      return {
-        ...state,
-        hobbies: [
-          ...state.hobbies, {
-            id: nextHobbyId++,
-            hobby: action.hobby
-          }
-        ]
-      };
-    case "REMOVE_HOBBY":
-      return {
-        ...state,
-        hobbies: state.hobbies.filter((h) => h.id !== action.id)
-      };
-    case "ADD_MOVIE":
-      return {
-        ...state,
-        movies: [
-          ...state.movies, {
-            id: nextMovieId++,
-            title: action.title,
-            genre: action.genre
-          }
-        ]
-      };
-    case "REMOVE_MOVIE":
-      return {
-        ...state,
-        movies: state.movies.filter((m) => m.id !== action.id)
-      };
-
+      return action.name;
     default:
       return state;
-  }
+  };
 };
+
+var hobbiesReducer = (state = [], action) => {
+  switch (action.type) {
+    case "ADD_HOBBY":
+      return [
+        ...state, {
+          id: nextHobbyId++,
+          hobby: action.hobby
+        }
+      ];
+
+    case "REMOVE_HOBBY":
+      return state.filter((h) => h.id !== action.id);
+    default:
+      return state;
+  };
+};
+
+var moviesReducer = (state = [], action) => {
+  switch (action.type) {
+    case "ADD_MOVIE":
+      return [
+        ...state, {
+          id: nextMovieId++,
+          title: action.title,
+          genre: action.genre
+        }
+      ];
+
+    case "REMOVE_MOVIE":
+      return state.filter((m) => m.id !== action.id);
+    default:
+      return state;
+  };
+};
+
+var reducer = redux.combineReducers({name: nameReducer, hobbies: hobbiesReducer, movies: moviesReducer});
 
 // argument needs to be a pure function
 var store = redux.createStore(reducer, redux.compose(
@@ -67,7 +61,7 @@ var store = redux.createStore(reducer, redux.compose(
 var unsubscribe = store.subscribe(() => {
   var state = store.getState();
   console.log("new state", store.getState());
-  document.getElementById('app').innerHTML = state.name + state.hobbies[0];
+  document.getElementById('app').innerHTML = state.name + state.hobbies;
 });
 //unsubscribe();
 
@@ -88,6 +82,7 @@ store.dispatch({type: 'ADD_HOBBY', hobby: 'sleeping'});
 store.dispatch({type: 'ADD_HOBBY', hobby: 'eating'});
 store.dispatch({type: 'ADD_HOBBY', hobby: 'coding'});
 store.dispatch({type: 'ADD_MOVIE', title: 'Outlaw Jose Whales', genre: "Western"});
+store.dispatch({type: 'ADD_MOVIE', title: 'Batman', genre: "Action"});
 store.dispatch({type: 'CHANGE_NAME', name: 'Jill'});
 store.dispatch({type: 'REMOVE_HOBBY', id: 2});
 store.dispatch({type: 'REMOVE_HOBBY', id: 1});
