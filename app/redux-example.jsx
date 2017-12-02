@@ -19,18 +19,38 @@ var reducer = (state = {name: 'Anonymous'}, action) => {
 };
 
 // argument needs to be a pure function
-var store = redux.createStore(reducer);
+var store = redux.createStore(reducer, redux.compose(
+  window.devToolsExtension? window.devToolsExtension(): f => f
+));
+
+//subscribe to changes - pass function
+var unsubscribe = store.subscribe(()=>{
+  var state = store.getState();
+  console.log("name is", state.name);
+  document.getElementById('app').innerHTML =state.name;
+});
+//unsubscribe();
+
 
 var currentState = store.getState();
 console.log('currentState', currentState);
 
-var action = {
+// var action = {
+//   type: 'CHANGE_NAME',
+//   name: 'Dave'
+// };
+//store.dispatch(action);
+
+store.dispatch({
   type: 'CHANGE_NAME',
   name: 'Dave'
-};
+});
 
-store.dispatch(action);
-console.log('name should be changed to ' + action.name, store.getState());
+store.dispatch({
+  type: 'CHANGE_NAME',
+  name: 'Jill'
+});
+
 
 // /* pure function (no outside varibles,
 //    no change outside variables, always

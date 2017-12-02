@@ -7,10 +7,10 @@ $(document).foundation();
 // application styles
 require('style!css!sass!applicationStyles')
 
-ReactDOM.render(
-   <p>Experimenting with redux</p>,
-   document.getElementById('app')
- );
+// ReactDOM.render(
+//    <p>Experimenting with redux</p>,
+//    document.getElementById('app')
+//  );
 
 // require('./redux-example.jsx');
 require('./redux-todo-example.jsx');
