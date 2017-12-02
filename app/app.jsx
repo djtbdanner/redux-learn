@@ -8,6 +8,8 @@ $(document).foundation();
 require('style!css!sass!applicationStyles')
 
 ReactDOM.render(
-   <p>Boilerplate for React with test modules</p>,
+   <p>Experimenting with redux</p>,
    document.getElementById('app')
  );
+
+require('./redux-example.jsx');
