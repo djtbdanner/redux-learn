@@ -1,4 +1,6 @@
 var redux = require('redux');
+
+// Thunk allows the redux to process actions which are more or less functions
 var thunk = require('redux-thunk').default;
 
 var {
@@ -20,5 +22,4 @@ export var configure = () => {
     : f => f));
 
     return store;
-
 }
